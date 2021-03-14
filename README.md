@@ -26,11 +26,11 @@ reactor.isolatedState(\.boolProperty)
 class ViewReactor: IsolatedStateReactor {
   enum Action { ... }
   enum Mutation { ... }
-  // State should provide currentUpdates stores keyPath array to know which property is updated by mutation
+  // State should provide updates stores keyPath array to know which property is updated by mutation
   struct State: UpdateStorable {
     var boolProperty = false
     
-    var currentUpdates: [PartialKeyPath<Self>] = [\State.self]
+    var updates: [PartialKeyPath<Self>] = [\State.self]
   }
 
   func mutate(action: Action) -> Observable<Mutation> { ... }
