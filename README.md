@@ -23,38 +23,23 @@ reactor.isolatedState(\.boolProperty)
   .subscribe(...)
   
 // implementation
-class ViewReactor: Reactor {
+class ViewReactor: IsolatedStateReactor {
   enum Action { ... }
   enum Mutation { ... }
   // State should provide currentUpdates stores keyPath array to know which property is updated by mutation
-  struct State {
+  struct State: UpdateStorable {
     var boolProperty = false
     
-    var currentUpdates: [PartialKeyPath<Self>] = []
-    subscript<T>(_ keyPath: WritableKeyPath<Self, T>) -> T {
-      get { self[keyPath: keyPath] }
-      set {
-        self[keyPath: keyPath] = newValue
-        self.currentUpdates.append(keyPath)
-      }
-    }
+    var currentUpdates: [PartialKeyPath<Self>] = [\State.self]
   }
 
-  func isolatedState<T>(_ keyPath: KeyPath<State, T>) -> Observable<T> {
-    self.state
-      .filter({ $0.currentUpdates.contains(keyPath) })
-      .map({ $0[keyPath: keyPath] })
-  }
-  
   func mutate(action: Action) -> Observable<Mutation> { ... }
-  func reduce(state: State, mutation: Mutation) -> State {
-    var state = state
-    // reset 
-    state.currentUpdates = []
+  func reduce(isolatedState: inout IsolatedState, mutation: Mutation) {
     switch mutation {
     case let .updateBoolProperty(bool):
-      // currently, this seems like tricky
+      // this might seem like pretty tricky, but there's no other way currently.
       state[\.boolProperty] = bool
     }
   }
+}
 ```
