@@ -13,6 +13,7 @@
 		2F5810A325FCB95100D116D7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F5810A125FCB95100D116D7 /* LaunchScreen.storyboard */; };
 		2F5810B025FCBF5800D116D7 /* ViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5810AF25FCBF5800D116D7 /* ViewReactor.swift */; };
 		2F5810B825FCC06F00D116D7 /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2F5810B725FCC06F00D116D7 /* ReactorKit */; };
+		2F5810C125FE895C00D116D7 /* IsolatedStateReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5810C025FE895C00D116D7 /* IsolatedStateReactor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		2F5810A225FCB95100D116D7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2F5810A425FCB95100D116D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F5810AF25FCBF5800D116D7 /* ViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewReactor.swift; sourceTree = "<group>"; };
+		2F5810C025FE895C00D116D7 /* IsolatedStateReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsolatedStateReactor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				2F58109625FCB95000D116D7 /* AppDelegate.swift */,
+				2F5810C025FE895C00D116D7 /* IsolatedStateReactor.swift */,
 				2F58109A25FCB95000D116D7 /* ViewController.swift */,
 				2F5810AF25FCBF5800D116D7 /* ViewReactor.swift */,
 				2F58109F25FCB95100D116D7 /* Assets.xcassets */,
@@ -152,6 +155,7 @@
 				2F58109B25FCB95000D116D7 /* ViewController.swift in Sources */,
 				2F5810B025FCBF5800D116D7 /* ViewReactor.swift in Sources */,
 				2F58109725FCB95000D116D7 /* AppDelegate.swift in Sources */,
+				2F5810C125FE895C00D116D7 /* IsolatedStateReactor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

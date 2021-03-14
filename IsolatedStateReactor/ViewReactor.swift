@@ -7,7 +7,7 @@
 
 import ReactorKit
 
-class ViewReactor: Reactor {
+class ViewReactor: IsolatedStateReactor {
   enum Action {
     case loadName
     case loadAge
@@ -20,19 +20,11 @@ class ViewReactor: Reactor {
     case refresh
   }
   
-  struct State {
+  struct State: UpdateStorable {
     var name = ""
     var age = 0
     
-    fileprivate var currentUpdates: [PartialKeyPath<Self>] = []
-    
-    fileprivate subscript<T>(_ keyPath: WritableKeyPath<Self, T>) -> T {
-      get { self[keyPath: keyPath] }
-      set {
-        self[keyPath: keyPath] = newValue
-        self.currentUpdates.append(keyPath)
-      }
-    }
+    var updates: [PartialKeyPath<Self>] = [\State.self]
   }
   
   let initialState = State()
@@ -48,28 +40,19 @@ class ViewReactor: Reactor {
     }
   }
   
-  func reduce(state: State, mutation: Mutation) -> State {
-    var state = state
-    state.currentUpdates = []
+  func reduce(isolatedState: inout IsolatedState, mutation: Mutation) {
     switch mutation {
     case .setName:
-      state[\.name] = self.randomString(length: 10)
+      isolatedState[\.name] = self.randomString(length: 10)
     case .setAge:
-      state[\.age] = (0...100).randomElement() ?? 0
+      isolatedState[\.age] = (0...100).randomElement() ?? 0
     case .refresh:
-      let name = state.name
-      let age = state.age
+      let name = isolatedState.name
+      let age = isolatedState.age
       
-      state[\.name] = name
-      state[\.age] = age
+      isolatedState[\.name] = name
+      isolatedState[\.age] = age
     }
-    return state
-  }
-  
-  func isolatedState<T>(_ keyPath: KeyPath<State, T>) -> Observable<T> {
-    self.state
-      .filter({ $0.currentUpdates.contains(keyPath) })
-      .map({ $0[keyPath: keyPath] })
   }
   
   private func randomString(length: Int) -> String {
