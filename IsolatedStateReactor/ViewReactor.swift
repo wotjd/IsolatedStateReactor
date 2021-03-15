@@ -43,15 +43,15 @@ class ViewReactor: IsolatedStateReactor {
   func reduce(isolatedState: inout IsolatedState, mutation: Mutation) {
     switch mutation {
     case .setName:
-      isolatedState[\.name] = self.randomString(length: 10)
+      isolatedState.name = self.randomString(length: 10)
     case .setAge:
-      isolatedState[\.age] = (0...100).randomElement() ?? 0
+      isolatedState.age = (0...100).randomElement() ?? 0
     case .refresh:
       let name = isolatedState.name
       let age = isolatedState.age
       
-      isolatedState[\.name] = name
-      isolatedState[\.age] = age
+      isolatedState.name = name
+      isolatedState.age = age
     }
   }
   

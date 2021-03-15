@@ -37,8 +37,7 @@ class ViewReactor: IsolatedStateReactor {
   func reduce(isolatedState: inout IsolatedState, mutation: Mutation) {
     switch mutation {
     case let .updateBoolProperty(bool):
-      // this might seem like pretty tricky, but there's no other way currently.
-      state[\.boolProperty] = bool
+      state.boolProperty = bool
     }
   }
 }

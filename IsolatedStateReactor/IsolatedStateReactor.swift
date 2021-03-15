@@ -22,18 +22,39 @@ extension UpdateStorable {
   }
 }
 
+@dynamicMemberLookup
+struct DynamicWritableWrapper<T> {
+  var value: T
+  
+  init(_ value: T) {
+    self.value = value
+  }
+  
+  subscript<Member>(dynamicMember dynamicMember: WritableKeyPath<T, Member>) -> Member {
+    get { self.value[keyPath: dynamicMember] }
+    set { self.value[keyPath: dynamicMember] = newValue }
+  }
+}
+
+extension DynamicWritableWrapper where T: UpdateStorable {
+  subscript<Member>(dynamicMember dynamicMember: WritableKeyPath<T, Member>) -> Member {
+    get { self.value[dynamicMember] }
+    set { self.value[dynamicMember] = newValue }
+  }
+}
+
 protocol IsolatedStateReactor: Reactor where State: UpdateStorable {
-  typealias IsolatedState = State
+  typealias IsolatedState = DynamicWritableWrapper<State>
   
   func reduce(isolatedState: inout IsolatedState, mutation: Mutation)
 }
 
 extension IsolatedStateReactor {
   func reduce(state: State, mutation: Mutation) -> State {
-    var state = state
-    state.updates = []
-    self.reduce(isolatedState: &state, mutation: mutation)
-    return state
+    var wrappedState = DynamicWritableWrapper(state)
+    wrappedState.updates = []
+    self.reduce(isolatedState: &wrappedState, mutation: mutation)
+    return wrappedState.value
   }
   
   func reduce(isolatedState: inout IsolatedState, mutation: Mutation) { }
