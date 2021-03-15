@@ -43,6 +43,8 @@ extension DynamicWritableWrapper where T: UpdateStorable {
   }
 }
 
+// TODO: Add ReferenceWritableWrapper for class type State
+
 protocol IsolatedStateReactor: Reactor where State: UpdateStorable {
   typealias IsolatedState = DynamicWritableWrapper<State>
   
