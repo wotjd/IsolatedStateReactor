@@ -46,15 +46,20 @@ extension DynamicWritableWrapper where T: UpdateStorable {
 protocol IsolatedStateReactor: Reactor where State: UpdateStorable {
   typealias IsolatedState = DynamicWritableWrapper<State>
   
+  func reduce(isolatedState: IsolatedState, mutation: Mutation) -> IsolatedState
   func reduce(isolatedState: inout IsolatedState, mutation: Mutation)
 }
 
 extension IsolatedStateReactor {
   func reduce(state: State, mutation: Mutation) -> State {
-    var wrappedState = DynamicWritableWrapper(state)
-    wrappedState.updates = []
-    self.reduce(isolatedState: &wrappedState, mutation: mutation)
-    return wrappedState.value
+    self.reduce(isolatedState: .init(state), mutation: mutation).value
+  }
+  
+  func reduce(isolatedState: IsolatedState, mutation: Mutation) -> IsolatedState {
+    var isolatedState = isolatedState
+    isolatedState.updates = []
+    self.reduce(isolatedState: &isolatedState, mutation: mutation)
+    return isolatedState
   }
   
   func reduce(isolatedState: inout IsolatedState, mutation: Mutation) { }
