@@ -54,12 +54,13 @@ protocol IsolatedStateReactor: Reactor where State: UpdateStorable {
 
 extension IsolatedStateReactor {
   func reduce(state: State, mutation: Mutation) -> State {
-    self.reduce(isolatedState: .init(state), mutation: mutation).value
+    var isolatedState = IsolatedState(state)
+    isolatedState.updates = []
+    return self.reduce(isolatedState: isolatedState, mutation: mutation).value
   }
   
   func reduce(isolatedState: IsolatedState, mutation: Mutation) -> IsolatedState {
     var isolatedState = isolatedState
-    isolatedState.updates = []
     self.reduce(isolatedState: &isolatedState, mutation: mutation)
     return isolatedState
   }
